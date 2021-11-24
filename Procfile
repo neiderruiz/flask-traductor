@@ -1,3 +1,1 @@
-web: gunicorn traductor-app:app
-heroku ps:scale web=1
-python index.py
+web: gunicorn--bind 0.0 .0 .0: $PORT flaskapp: app
