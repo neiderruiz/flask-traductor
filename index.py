@@ -70,4 +70,4 @@ def phonetic():
     output.save(output_file)
     return jsonify(phonetic=ipa, pronunciation=output_file)
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.1.14')
+    app.run(debug=False, host='192.168.1.14')

@@ -1,0 +1,1 @@
+web: gunicorn traductor-app:app
