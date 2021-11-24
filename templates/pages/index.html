@@ -1,0 +1,40 @@
+{% extends '/base/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-5">
+        <form action="" method="get">
+            <input placeholder="Insertar frase" value="{{ title }}" type="text" class="form-control" name="word" />
+        </form>
+    </div>
+    <div>
+        <h2>Traducciones</h2>
+        <div class="row gx-2">
+            {% for translation in translations %}
+            <div class="col-6 ">
+
+                <a href="#" class="cursor-pointer list-group-item list-group-item-action">
+                    {{ translation }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mt-5">
+        {% if count_phrases %}
+        <h2>Ver frases relacionadas({{count_phrases}})</h2>
+        <a href="phrases?word={{title}}">Ver frases</a>
+        {% endif %}
+    </div>
+
+    <div class="mt-5">
+        {% if count_examples %}
+        <h2>Ejemplos ({{count_examples}})</h2>
+        <a href="examples?word={{title}}&lang={{language}}">Ver frases</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

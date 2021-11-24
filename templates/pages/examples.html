@@ -1,0 +1,88 @@
+{% extends '/base/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-5">
+        <form action="/examples?lang=es" method="get">
+            <div class="input-group">
+                <input placeholder="Insertar frase" value="{{ title }}" type="text" class="form-control" name="word" />
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+            <input hidden placeholder="Insertar frase" value="{{data['lang']}}" type="text" class="form-control" name="lang" />
+        </form>
+    </div>
+
+    <h2 class="capitalize">
+        phrases
+    </h2>
+
+    <div class="table-responsive">
+        <table class="table mt-4 table-responsive">
+            <thead>
+                <tr>
+                    <th>English</th>
+                    <th>Spanish</th>
+                    <th>Phonetic</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in data['sentences'] %}
+                <tr>
+                    <th>
+                        {% if result.source %}
+                        {{ result.source|safe }}
+                        {% endif %}
+                    </th>
+                    <th>
+                        {% if result.target %}
+                        {{ result.target|safe }}
+                        {% endif %}
+      
+                    </th>
+                    <th style="white-space:nowrap;">
+                        
+                        <button class="btn btn-primary" get_phonetic="button">
+                            Phonetic
+                        </button>
+                    </th>
+                </div>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% block javascript %}
+    <script>
+
+        const get_phonetic = (e) => {
+            e.target.disabled=true;
+            if (e.target.tagName === 'BUTTON') {
+                    e.disabled=false;
+                    var regex = /(<([^>]+)>)/ig;
+                    const target = e.target.parentNode.parentNode.childNodes[1].innerHTML.replaceAll(regex, '');
+                    fetch(`http://192.168.1.14:5000/phonetic?text=${target}`).then(response => response.json()).then(data => {
+                        e.target.parentNode.parentNode.childNodes[1].innerHTML += `</br><div class="text-primary mt-3 mb-3">${data.phonetic}</div>
+                        <audio controls class="mt-2">
+                            <source src="http://192.168.1.14:5000/${data.pronunciation}" type="audio/mp3">
+                                Tu navegador no soporta audio HTML5.
+                        </audio>
+                        `;
+                    });
+                }
+        }
+
+        (function() {
+            const buttons = document.querySelectorAll('button[get_phonetic="button"]');
+            console.log(buttons,'buttons');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", get_phonetic);
+            }
+        })();
+    </script>
+    {% endblock %}
+</div>
+</div>
+{% endblock %}
+
